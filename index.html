@@ -1,263 +1,114 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Relógio Digital Avançado</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relógio Digital + Cronômetro</title>
   <style>
-    /* Reset básico */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #111;
+      color: #fff;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      transition: background 0.5s, color 0.5s;
-      background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
-      color: #222;
+      margin: 0;
     }
-
-    /* Modo escuro */
-    body.dark {
-      background: linear-gradient(135deg, #141e30 0%, #243b55 100%);
-      color: #eee;
-    }
-
-    .clock {
-      font-size: 4rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      margin-bottom: 0.2em;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .blink {
-      opacity: 1;
-      animation: blink 1s steps(2, start) infinite;
-    }
-
-    @keyframes blink {
-      50% {
-        opacity: 0;
-      }
-    }
-
-    .date {
-      font-size: 1.5rem;
-      margin-bottom: 1.5em;
-    }
-
-    .weekday {
-      font-size: 1.25rem;
-      margin-bottom: 1em;
-      font-weight: 600;
-    }
-
-    /* Botão cronômetro */
-    .btn-cronometro {
-      padding: 0.75em 1.5em;
-      font-size: 1.1rem;
-      border: none;
-      border-radius: 6px;
-      background-color: #66a6ff;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s;
-      user-select: none;
-      margin-top: 20px;
-    }
-
-    .btn-cronometro:hover {
-      background-color: #5583d4;
-    }
-
-    /* Container cronômetro */
-    .cronometro-container {
-      margin-top: 20px;
+    h1 {
+      margin-bottom: 40px;
       font-size: 2rem;
-      font-weight: 600;
-      user-select: none;
-      display: none;
-      flex-direction: column;
-      align-items: center;
+    }
+    .relogio, .cronometro {
+      font-size: 3rem;
+      background-color: #222;
+      padding: 20px 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #0f0;
+      margin-bottom: 30px;
+      letter-spacing: 2px;
+    }
+    .botoes {
+      display: flex;
       gap: 10px;
     }
-
-    .cronometro-buttons button {
-      margin: 0 5px;
-      padding: 0.5em 1em;
+    button {
+      padding: 10px 20px;
       font-size: 1rem;
       border: none;
-      border-radius: 4px;
+      border-radius: 5px;
+      background-color: #0f0;
+      color: #000;
       cursor: pointer;
-      background-color: #66a6ff;
-      color: white;
-      transition: background-color 0.3s;
+      transition: 0.2s;
     }
-
-    .cronometro-buttons button:hover {
-      background-color: #5583d4;
-    }
-
-    /* Fundo animado */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: radial-gradient(circle at center, rgba(255,255,255,0.15), transparent 70%);
-      pointer-events: none;
-      animation: pulse 6s ease-in-out infinite;
-      z-index: -1;
-    }
-
-    @keyframes pulse {
-      0%, 100% {
-        transform: scale(1);
-        opacity: 0.15;
-      }
-      50% {
-        transform: scale(1.1);
-        opacity: 0.3;
-      }
-    }
-
-    /* Responsivo */
-    @media (max-width: 600px) {
-      .clock {
-        font-size: 3rem;
-      }
-      .date {
-        font-size: 1.2rem;
-      }
-      .weekday {
-        font-size: 1rem;
-      }
-      .btn-cronometro {
-        font-size: 1rem;
-      }
-      .cronometro-container {
-        font-size: 1.5rem;
-      }
+    button:hover {
+      background-color: #0c0;
     }
   </style>
 </head>
 <body>
-  <div class="clock" id="clock">
-    00:00<span class="blink">:</span>00
-  </div>
-  <div class="weekday" id="weekday">Segunda-feira</div>
-  <div class="date" id="date">01 de janeiro de 2025</div>
 
-  <button class="btn-cronometro" id="toggleCronometro">Mostrar Cronômetro</button>
+  <h1>⏰ Relógio Digital + Cronômetro</h1>
 
-  <div class="cronometro-container" id="cronometroContainer">
-    <div id="cronometroDisplay">00:00:00</div>
-    <div class="cronometro-buttons">
-      <button id="startStopCronometro">Iniciar</button>
-      <button id="resetCronometro">Resetar</button>
-    </div>
+  <div class="relogio" id="relogio">--:--:--</div>
+
+  <div class="cronometro" id="cronometro">00:00:00:000</div>
+
+  <div class="botoes">
+    <button onclick="iniciarCronometro()">Iniciar</button>
+    <button onclick="pararCronometro()">Parar</button>
+    <button onclick="resetarCronometro()">Resetar</button>
   </div>
 
   <script>
-    // Função para formatar números com zero à esquerda
-    function pad(number) {
-      return number.toString().padStart(2, '0');
+    // Relógio Digital
+    function atualizarRelogio() {
+      const agora = new Date();
+      const horas = String(agora.getHours()).padStart(2, '0');
+      const minutos = String(agora.getMinutes()).padStart(2, '0');
+      const segundos = String(agora.getSeconds()).padStart(2, '0');
+      document.getElementById('relogio').innerText = `${horas}:${minutos}:${segundos}`;
     }
-
-    // Atualiza o relógio e a data
-    function updateClock() {
-      const now = new Date();
-
-      // Hora com segundos piscando
-      let hours = pad(now.getHours());
-      let minutes = pad(now.getMinutes());
-      let seconds = pad(now.getSeconds());
-
-      const blinkColon = now.getSeconds() % 2 === 0 ? ':' : ' ';
-
-      document.getElementById('clock').innerHTML = `${hours}:${minutes}<span class="blink">${blinkColon}</span>${seconds}`;
-
-      // Dias da semana em pt-BR
-      const weekdays = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
-      document.getElementById('weekday').textContent = weekdays[now.getDay()];
-
-      // Data formatada
-      const months = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
-      const day = now.getDate();
-      const month = months[now.getMonth()];
-      const year = now.getFullYear();
-
-      document.getElementById('date').textContent = `${day} de ${month} de ${year}`;
-
-      // Modo claro/escuro automático
-      if (now.getHours() >= 18 || now.getHours() < 6) {
-        document.body.classList.add('dark');
-      } else {
-        document.body.classList.remove('dark');
-      }
-    }
-
-    // Atualiza o relógio a cada segundo
-    setInterval(updateClock, 1000);
-    updateClock();
+    setInterval(atualizarRelogio, 1000);
+    atualizarRelogio();
 
     // Cronômetro
-    let cronometroInterval;
-    let cronometroTime = 0;
+    let startTime;
+    let intervalId;
     let running = false;
+    let tempoDecorrido = 0;
 
-    function formatTime(ms) {
-      const totalSeconds = Math.floor(ms / 1000);
-      const hours = pad(Math.floor(totalSeconds / 3600));
-      const minutes = pad(Math.floor((totalSeconds % 3600) / 60));
-      const seconds = pad(totalSeconds % 60);
-      return `${hours}:${minutes}:${seconds}`;
+    function formatarTempo(tempo) {
+      const horas = String(Math.floor(tempo / 3600000)).padStart(2, '0');
+      const minutos = String(Math.floor((tempo % 3600000) / 60000)).padStart(2, '0');
+      const segundos = String(Math.floor((tempo % 60000) / 1000)).padStart(2, '0');
+      const milissegundos = String(tempo % 1000).padStart(3, '0');
+      return `${horas}:${minutos}:${segundos}:${milissegundos}`;
     }
 
-    document.getElementById('toggleCronometro').addEventListener('click', () => {
-      const container = document.getElementById('cronometroContainer');
-      if (container.style.display === 'flex') {
-        container.style.display = 'none';
-        document.getElementById('toggleCronometro').textContent = 'Mostrar Cronômetro';
-      } else {
-        container.style.display = 'flex';
-        document.getElementById('toggleCronometro').textContent = 'Ocultar Cronômetro';
-      }
-    });
+    function iniciarCronometro() {
+      if (running) return;
+      running = true;
+      startTime = Date.now() - tempoDecorrido;
+      intervalId = setInterval(() => {
+        tempoDecorrido = Date.now() - startTime;
+        document.getElementById('cronometro').innerText = formatarTempo(tempoDecorrido);
+      }, 10);
+    }
 
-    document.getElementById('startStopCronometro').addEventListener('click', () => {
-      if (!running) {
-        let startTime = Date.now() - cronometroTime;
-        cronometroInterval = setInterval(() => {
-          cronometroTime = Date.now() - startTime;
-          document.getElementById('cronometroDisplay').textContent = formatTime(cronometroTime);
-        }, 250);
-        running = true;
-        document.getElementById('startStopCronometro').textContent = 'Pausar';
-      } else {
-        clearInterval(cronometroInterval);
-        running = false;
-        document.getElementById('startStopCronometro').textContent = 'Iniciar';
-      }
-    });
-
-    document.getElementById('resetCronometro').addEventListener('click', () => {
-      clearInterval(cronometroInterval);
-      cronometroTime = 0;
+    function pararCronometro() {
       running = false;
-      document.getElementById('cronometroDisplay').textContent = '00:00:00';
-      document.getElementById('startStopCronometro').textContent = 'Iniciar';
-    });
+      clearInterval(intervalId);
+    }
+
+    function resetarCronometro() {
+      pararCronometro();
+      tempoDecorrido = 0;
+      document.getElementById('cronometro').innerText = "00:00:00:000";
+    }
   </script>
+
 </body>
 </html>
