@@ -4,60 +4,81 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Relógio Digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
       body {
-        background-color: #1e1e1e;
-        color: #fff;
-        font-family: 'Segoe UI', sans-serif;
+        height: 100vh;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        font-family: 'Share Tech Mono', monospace;
         display: flex;
         flex-direction: column;
-        align-items: center;
         justify-content: center;
-        height: 100vh;
-        margin: 0;
+        align-items: center;
+        color: #ffffff;
+      }
+
+      .container {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 40px;
+        text-align: center;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
       }
 
       h1 {
-        margin-bottom: 40px;
+        font-size: 2.2rem;
+        margin-bottom: 30px;
+        letter-spacing: 2px;
       }
 
       #clock,
       #stopwatch {
-        font-size: 3em;
-        margin: 10px;
+        font-size: 3.5rem;
+        margin: 15px 0;
+        letter-spacing: 4px;
       }
 
       .buttons {
         margin-top: 20px;
       }
 
-      button {
-        margin: 0 5px;
+      .buttons button {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
         padding: 10px 20px;
-        font-size: 1em;
-        background-color: #0f0;
-        border: none;
-        border-radius: 5px;
+        font-size: 1rem;
+        margin: 0 8px;
+        border-radius: 8px;
         cursor: pointer;
-        color: #000;
-        transition: background 0.2s;
+        transition: all 0.2s ease;
       }
 
-      button:hover {
-        background-color: #0c0;
+      .buttons button:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.05);
       }
     </style>
   </head>
   <body>
-    <h1>Relógio Digital + Cronômetro</h1>
+    <div class="container">
+      <h1>Relógio Digital & Cronômetro</h1>
+      <div id="clock">00:00:00</div>
+      <div id="stopwatch">00:00:00.000</div>
 
-    <div id="clock">00:00:00</div>
-    <div id="stopwatch">00:00:00.000</div>
-
-    <div class="buttons">
-      <button onclick="startStopwatch()">Iniciar</button>
-      <button onclick="stopStopwatch()">Parar</button>
-      <button onclick="resetStopwatch()">Resetar</button>
+      <div class="buttons">
+        <button onclick="startStopwatch()">Iniciar</button>
+        <button onclick="stopStopwatch()">Parar</button>
+        <button onclick="resetStopwatch()">Resetar</button>
+      </div>
     </div>
 
     <script>
