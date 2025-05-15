@@ -1,114 +1,116 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Relógio Digital + Cronômetro</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #111;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-    }
-    h1 {
-      margin-bottom: 40px;
-      font-size: 2rem;
-    }
-    .relogio, .cronometro {
-      font-size: 3rem;
-      background-color: #222;
-      padding: 20px 40px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #0f0;
-      margin-bottom: 30px;
-      letter-spacing: 2px;
-    }
-    .botoes {
-      display: flex;
-      gap: 10px;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 5px;
-      background-color: #0f0;
-      color: #000;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    button:hover {
-      background-color: #0c0;
-    }
-  </style>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Relógio Digital</title>
+    <style>
+      body {
+        background-color: #1e1e1e;
+        color: #fff;
+        font-family: 'Segoe UI', sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+      }
 
-  <h1>⏰ Relógio Digital + Cronômetro</h1>
+      h1 {
+        margin-bottom: 40px;
+      }
 
-  <div class="relogio" id="relogio">--:--:--</div>
+      #clock,
+      #stopwatch {
+        font-size: 3em;
+        margin: 10px;
+      }
 
-  <div class="cronometro" id="cronometro">00:00:00:000</div>
+      .buttons {
+        margin-top: 20px;
+      }
 
-  <div class="botoes">
-    <button onclick="iniciarCronometro()">Iniciar</button>
-    <button onclick="pararCronometro()">Parar</button>
-    <button onclick="resetarCronometro()">Resetar</button>
-  </div>
+      button {
+        margin: 0 5px;
+        padding: 10px 20px;
+        font-size: 1em;
+        background-color: #0f0;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        color: #000;
+        transition: background 0.2s;
+      }
 
-  <script>
-    // Relógio Digital
-    function atualizarRelogio() {
-      const agora = new Date();
-      const horas = String(agora.getHours()).padStart(2, '0');
-      const minutos = String(agora.getMinutes()).padStart(2, '0');
-      const segundos = String(agora.getSeconds()).padStart(2, '0');
-      document.getElementById('relogio').innerText = `${horas}:${minutos}:${segundos}`;
-    }
-    setInterval(atualizarRelogio, 1000);
-    atualizarRelogio();
+      button:hover {
+        background-color: #0c0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Relógio Digital + Cronômetro</h1>
 
-    // Cronômetro
-    let startTime;
-    let intervalId;
-    let running = false;
-    let tempoDecorrido = 0;
+    <div id="clock">00:00:00</div>
+    <div id="stopwatch">00:00:00.000</div>
 
-    function formatarTempo(tempo) {
-      const horas = String(Math.floor(tempo / 3600000)).padStart(2, '0');
-      const minutos = String(Math.floor((tempo % 3600000) / 60000)).padStart(2, '0');
-      const segundos = String(Math.floor((tempo % 60000) / 1000)).padStart(2, '0');
-      const milissegundos = String(tempo % 1000).padStart(3, '0');
-      return `${horas}:${minutos}:${segundos}:${milissegundos}`;
-    }
+    <div class="buttons">
+      <button onclick="startStopwatch()">Iniciar</button>
+      <button onclick="stopStopwatch()">Parar</button>
+      <button onclick="resetStopwatch()">Resetar</button>
+    </div>
 
-    function iniciarCronometro() {
-      if (running) return;
-      running = true;
-      startTime = Date.now() - tempoDecorrido;
-      intervalId = setInterval(() => {
-        tempoDecorrido = Date.now() - startTime;
-        document.getElementById('cronometro').innerText = formatarTempo(tempoDecorrido);
-      }, 10);
-    }
+    <script>
+      // Relógio
+      function updateClock() {
+        const now = new Date();
+        const h = String(now.getHours()).padStart(2, '0');
+        const m = String(now.getMinutes()).padStart(2, '0');
+        const s = String(now.getSeconds()).padStart(2, '0');
+        document.getElementById('clock').textContent = `${h}:${m}:${s}`;
+      }
 
-    function pararCronometro() {
-      running = false;
-      clearInterval(intervalId);
-    }
+      setInterval(updateClock, 1000);
+      updateClock();
 
-    function resetarCronometro() {
-      pararCronometro();
-      tempoDecorrido = 0;
-      document.getElementById('cronometro').innerText = "00:00:00:000";
-    }
-  </script>
+      // Cronômetro
+      let stopwatchInterval;
+      let startTime;
+      let elapsed = 0;
+      let running = false;
 
-</body>
+      function formatTime(ms) {
+        const totalSeconds = Math.floor(ms / 1000);
+        const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+        const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+        const seconds = String(totalSeconds % 60).padStart(2, '0');
+        const milliseconds = String(ms % 1000).padStart(3, '0');
+        return `${hours}:${minutes}:${seconds}.${milliseconds}`;
+      }
+
+      function updateStopwatch() {
+        const now = Date.now();
+        elapsed = now - startTime;
+        document.getElementById('stopwatch').textContent = formatTime(elapsed);
+      }
+
+      function startStopwatch() {
+        if (running) return;
+        running = true;
+        startTime = Date.now() - elapsed;
+        stopwatchInterval = setInterval(updateStopwatch, 10);
+      }
+
+      function stopStopwatch() {
+        running = false;
+        clearInterval(stopwatchInterval);
+      }
+
+      function resetStopwatch() {
+        stopStopwatch();
+        elapsed = 0;
+        document.getElementById('stopwatch').textContent = '00:00:00.000';
+      }
+    </script>
+  </body>
 </html>
