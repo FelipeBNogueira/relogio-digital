@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Relógio Digital Animado</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #1f4037, #99f2c8);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Orbitron', monospace;
+      color: #fff;
+      user-select: none;
+    }
+
+    .clock {
+      background: rgba(0,0,0,0.3);
+      padding: 30px 60px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,255,150,0.7);
+      font-size: 5rem;
+      letter-spacing: 8px;
+      text-align: center;
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        text-shadow: 0 0 20px #00ff96, 0 0 40px #00ff96;
+        color: #00ff96;
+      }
+      50% {
+        text-shadow: 0 0 40px #00ffd6, 0 0 60px #00ffd6;
+        color: #00ffd6;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="clock" id="clock">00:00:00</div>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('clock').textContent = `${h}:${m}:${s}`;
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>
