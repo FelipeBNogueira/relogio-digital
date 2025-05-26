@@ -89,7 +89,11 @@ function checkAlarm() {
 
 setInterval(checkAlarm, 1000);
 
-// Alternar tema claro/escuro
+// Alternar tema claro/escuro com nome dinâmico
 function toggleTheme() {
-  document.body.classList.toggle("light-theme");
+  const body = document.body;
+  const button = document.getElementById("theme-button");
+  const isLight = body.classList.toggle("light-theme");
+
+  button.textContent = isLight ? "Tema Escuro" : "Tema Claro";
 }
