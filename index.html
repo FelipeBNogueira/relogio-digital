@@ -5,72 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Relógio Digital</title>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        height: 100vh;
-        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-        font-family: 'Share Tech Mono', monospace;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        color: #ffffff;
-      }
-
-      .container {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 16px;
-        padding: 40px;
-        text-align: center;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-      }
-
-      h1 {
-        font-size: 2.2rem;
-        margin-bottom: 30px;
-        letter-spacing: 2px;
-      }
-
-      #clock,
-      #stopwatch {
-        font-size: 3.5rem;
-        margin: 15px 0;
-        letter-spacing: 4px;
-      }
-
-      .buttons {
-        margin-top: 20px;
-      }
-
-      .buttons button {
-        background: rgba(255, 255, 255, 0.15);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: white;
-        padding: 10px 20px;
-        font-size: 1rem;
-        margin: 0 8px;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-
-      .buttons button:hover {
-        background: rgba(255, 255, 255, 0.3);
-        transform: scale(1.05);
-      }
-    </style>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="container">
       <h1>Relógio Digital & Cronômetro</h1>
+      <div id="date">Carregando data...</div>
       <div id="clock">00:00:00</div>
       <div id="stopwatch">00:00:00.000</div>
 
@@ -78,60 +18,10 @@
         <button onclick="startStopwatch()">Iniciar</button>
         <button onclick="stopStopwatch()">Parar</button>
         <button onclick="resetStopwatch()">Resetar</button>
+        <button onclick="setAlarm()">Definir Alarme</button>
+        <button onclick="toggleTheme()">Tema Claro/Escuro</button>
       </div>
     </div>
-
-    <script>
-      // Relógio
-      function updateClock() {
-        const now = new Date();
-        const h = String(now.getHours()).padStart(2, '0');
-        const m = String(now.getMinutes()).padStart(2, '0');
-        const s = String(now.getSeconds()).padStart(2, '0');
-        document.getElementById('clock').textContent = `${h}:${m}:${s}`;
-      }
-
-      setInterval(updateClock, 1000);
-      updateClock();
-
-      // Cronômetro
-      let stopwatchInterval;
-      let startTime;
-      let elapsed = 0;
-      let running = false;
-
-      function formatTime(ms) {
-        const totalSeconds = Math.floor(ms / 1000);
-        const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-        const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
-        const seconds = String(totalSeconds % 60).padStart(2, '0');
-        const milliseconds = String(ms % 1000).padStart(3, '0');
-        return `${hours}:${minutes}:${seconds}.${milliseconds}`;
-      }
-
-      function updateStopwatch() {
-        const now = Date.now();
-        elapsed = now - startTime;
-        document.getElementById('stopwatch').textContent = formatTime(elapsed);
-      }
-
-      function startStopwatch() {
-        if (running) return;
-        running = true;
-        startTime = Date.now() - elapsed;
-        stopwatchInterval = setInterval(updateStopwatch, 10);
-      }
-
-      function stopStopwatch() {
-        running = false;
-        clearInterval(stopwatchInterval);
-      }
-
-      function resetStopwatch() {
-        stopStopwatch();
-        elapsed = 0;
-        document.getElementById('stopwatch').textContent = '00:00:00.000';
-      }
-    </script>
+    <script src="script.js"></script>
   </body>
 </html>
